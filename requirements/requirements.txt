@@ -1,0 +1,4 @@
+ArangoPy==0.4
+Django==1.7
+djangorestframework==2.4.3
+wsgiref==0.1.2
