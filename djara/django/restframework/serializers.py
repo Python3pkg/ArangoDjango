@@ -88,3 +88,31 @@ class CollectionModelSerializer(serializers.Serializer):
             #     kwargs['help_text'] = model_field.help_text
 
         return relations.PrimaryKeyRelatedField(**kwargs)
+
+    def save_object(self, obj, **kwargs):
+
+        model_class = self.opts.model
+        obj = model_class.objects._create_model_from_dict(obj)
+        self.object = obj
+
+        obj.save()
+
+    def delete_object(self, obj):
+        obj.delete()
+
+    def save(self, **kwargs):
+        """
+        Save the deserialized object and return it.
+        """
+        # Clear cached _data, which may be invalidated by `save()`
+        self._data = None
+
+        if isinstance(self.object, list):
+            [self.save_object(item, **kwargs) for item in self.object]
+
+            if self.object._deleted:
+                [self.delete_object(item) for item in self.object._deleted]
+        else:
+            self.save_object(self.object, **kwargs)
+
+        return self.object
