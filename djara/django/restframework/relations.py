@@ -18,7 +18,7 @@ class RelatedCollectionModelField(PrimaryKeyRelatedField):
         Return a readable representation for use with eg. select widgets.
         """
         desc = smart_text(obj)
-        ident = smart_text(self.to_native(obj.id))
+        ident = smart_text(self.to_native(self._get_object_id(obj=obj)))
         if desc == ident:
             return desc
         return "%s - %s" % (desc, ident)
