@@ -90,6 +90,19 @@ class CollectionModelSerializer(serializers.Serializer):
 
         return RelatedCollectionModelField(**kwargs)
 
+    def restore_object(self, attrs, instance=None):
+        """
+        Deserialize a dictionary of attributes into an object instance.
+        You should override this method to control how deserialized objects
+        are instantiated.
+        """
+        if instance is not None:
+            for attribute_name in attrs:
+                attribute_value = attrs[attribute_name]
+                setattr(instance, attribute_name, attribute_value)
+            return instance
+        return attrs
+
     def save_object(self, obj, **kwargs):
 
         model_class = self.opts.model
