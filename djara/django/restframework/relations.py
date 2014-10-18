@@ -11,7 +11,7 @@ class RelatedCollectionModelField(PrimaryKeyRelatedField):
 
     # TODO: Remove these field hacks...
     def prepare_value(self, obj):
-        return self.to_native(obj.id)
+        return self.to_native(self._get_object_id(obj=obj))
 
     def label_from_instance(self, obj):
         """
@@ -67,11 +67,11 @@ class RelatedCollectionModelField(PrimaryKeyRelatedField):
             # Forward relationship
             if is_simple_callable(getattr(queryset, 'all', None)):
                 queryset.all()
-                return [self.to_native(item.id) for item in queryset ]
+                return [self.to_native(self._get_object_id(obj=item)) for item in queryset ]
             else:
                 # Also support non-queryset iterables.
                 # This allows us to also support plain lists of related items.
-                return [self.to_native(item.id) for item in queryset]
+                return [self.to_native(self._get_object_id(obj=item)) for item in queryset]
 
         # To-one relationship
         try:
@@ -86,3 +86,9 @@ class RelatedCollectionModelField(PrimaryKeyRelatedField):
 
         # Forward relationship
         return self.to_native(id)
+
+    def _get_object_id(self, obj):
+        """
+        """
+
+        return obj.document.id
