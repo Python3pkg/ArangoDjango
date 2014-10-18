@@ -66,7 +66,8 @@ class RelatedCollectionModelField(PrimaryKeyRelatedField):
 
             # Forward relationship
             if is_simple_callable(getattr(queryset, 'all', None)):
-                return [self.to_native(item.id) for item in queryset.all()]
+                queryset.all()
+                return [self.to_native(item.id) for item in queryset ]
             else:
                 # Also support non-queryset iterables.
                 # This allows us to also support plain lists of related items.
