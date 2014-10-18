@@ -1,5 +1,6 @@
 from rest_framework import serializers, fields, relations
 from arangodb.orm.fields import NumberField, CharField, ForeignKeyField, ManyToManyField
+from djara.django.restframework.relations import RelatedCollectionModelField
 
 
 class CollectionModelSerializerOptions(serializers.SerializerOptions):
@@ -87,7 +88,7 @@ class CollectionModelSerializer(serializers.Serializer):
             # if model_field.help_text is not None:
             #     kwargs['help_text'] = model_field.help_text
 
-        return relations.PrimaryKeyRelatedField(**kwargs)
+        return RelatedCollectionModelField(**kwargs)
 
     def save_object(self, obj, **kwargs):
 
