@@ -32,7 +32,7 @@ class RelatedCollectionModelField(PrimaryKeyRelatedField):
             raise Exception('Writable related fields must include a `queryset` argument')
 
         try:
-            single_object = self.queryset.get(id=data)
+            single_object = self.queryset.get(_id=data)
             if single_object is None:
                 raise ObjectDoesNotExist()
 
