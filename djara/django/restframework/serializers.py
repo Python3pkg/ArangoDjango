@@ -49,10 +49,10 @@ class CollectionModelSerializer(serializers.Serializer):
         model_class_fields = model_class.get_collection_fields_dict()
 
         if 'id' in displayed_fields:
-            return_fields['id'] = fields.CharField()
+            return_fields['id'] = fields.CharField(read_only=True)
 
         if 'key' in displayed_fields:
-            return_fields['key'] = fields.IntegerField()
+            return_fields['key'] = fields.IntegerField(read_only=True)
 
         for field_name in displayed_fields:
 
