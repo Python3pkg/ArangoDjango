@@ -31,10 +31,21 @@ class CollectionModelSerializer(serializers.Serializer):
         return_fields = {}
 
         model_class = self.opts.model
+        displayed_fields = self.opts.fields
 
         model_class_fields = model_class.get_collection_fields_dict()
 
-        for field_name in model_class_fields:
+        if 'id' in displayed_fields:
+            return_fields['id'] = fields.CharField()
+
+        if 'key' in displayed_fields:
+            return_fields['key'] = fields.IntegerField()
+
+        for field_name in displayed_fields:
+
+            if field_name == id or field_name == 'key':
+                continue
+
             field = model_class_fields[field_name]
 
             kwargs = {}
