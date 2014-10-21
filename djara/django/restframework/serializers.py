@@ -1,3 +1,5 @@
+import copy
+from django.utils.datastructures import SortedDict
 from rest_framework import serializers, fields, relations
 from arangodb.orm.fields import NumberField, CharField, ForeignKeyField, ManyToManyField
 from djara.django.restframework.relations import RelatedCollectionModelField
@@ -28,7 +30,18 @@ class CollectionModelSerializer(serializers.Serializer):
         """
         """
 
-        return_fields = {}
+        return_fields = SortedDict()
+
+        # Get the explicitly declared fields
+        base_fields = copy.deepcopy(self.base_fields)
+        for key, field in base_fields.items():
+            return_fields[key] = field
+
+        # Add in the default fields
+        default_fields = self.get_default_fields()
+        for key, val in default_fields.items():
+            if key not in return_fields:
+                return_fields[key] = val
 
         model_class = self.opts.model
         displayed_fields = self.opts.fields
@@ -43,7 +56,10 @@ class CollectionModelSerializer(serializers.Serializer):
 
         for field_name in displayed_fields:
 
-            if field_name == id or field_name == 'key':
+            if field_name == 'id' or field_name == 'key':
+                continue
+
+            if field_name in return_fields:
                 continue
 
             field = model_class_fields[field_name]
