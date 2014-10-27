@@ -33,8 +33,13 @@ class RelatedCollectionModelField(PrimaryKeyRelatedField):
 
         try:
             single_object = self.queryset.get(_id=data)
+
+            # Check if object doesn't exists
             if single_object is None:
                 raise ObjectDoesNotExist()
+            # Else return it
+            else:
+                return single_object
 
         except ObjectDoesNotExist:
             msg = self.error_messages['does_not_exist'] % smart_text(data)
