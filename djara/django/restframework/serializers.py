@@ -1,4 +1,5 @@
 import copy
+from django.core.exceptions import ValidationError
 from django.utils.datastructures import SortedDict
 from rest_framework import serializers, fields, relations
 from arangodb.orm.fields import NumberField, CharField, ForeignKeyField, ManyToManyField
@@ -117,12 +118,43 @@ class CollectionModelSerializer(serializers.Serializer):
 
         return RelatedCollectionModelField(**kwargs)
 
+    def restore_fields(self, data, files):
+        """
+        Core of deserialization, together with `restore_object`.
+        Converts a dictionary of data into a dictionary of deserialized fields.
+        """
+        reverted_data = {}
+
+        if isinstance(data, basestring):
+            model = self.opts.model.objects.get(_id=data)
+            self.object = model
+            return model
+
+        if data is not None and not isinstance(data, dict):
+            self._errors['non_field_errors'] = ['Invalid data']
+            return None
+
+        for field_name, field in self.fields.items():
+            field.initialize(parent=self, field_name=field_name)
+            try:
+                field.field_from_native(data, files, field_name, reverted_data)
+            except ValidationError as err:
+                self._errors[field_name] = list(err.messages)
+
+        return reverted_data
+
     def restore_object(self, attrs, instance=None):
         """
         Deserialize a dictionary of attributes into an object instance.
         You should override this method to control how deserialized objects
         are instantiated.
         """
+
+        if instance is None:
+            instance = self.opts.model()
+        else:
+            return instance
+
         if instance is not None:
             for attribute_name in attrs:
                 attribute_value = attrs[attribute_name]
