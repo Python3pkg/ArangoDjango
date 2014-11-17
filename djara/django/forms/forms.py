@@ -12,8 +12,7 @@ from django.forms.models import ModelFormOptions, ALL_FIELDS
 
 from arangodb.orm.fields import CharField as ArangoCharField, ChoiceField as ArangoChoiceField
 
-from dress_up.fields import FileField as ArangoFileField
-from dress_up.models import Clothing
+from djara.django.forms.fields import FileField as ArangoFileField
 
 
 def map_arangopy_field_to_form_field(model_field, **kwargs):
