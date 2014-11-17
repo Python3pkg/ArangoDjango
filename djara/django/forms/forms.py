@@ -204,4 +204,12 @@ class CollectionFormMetaclass(type):
         return new_class
 
 class CollectionForm(six.with_metaclass(CollectionFormMetaclass, BaseCollectionForm)):
-    pass
+
+    def save(self):
+        """
+        """
+
+        for key, value in self.cleaned_data.items():
+            setattr(self.instance, key, value)
+
+        self.instance.save()
