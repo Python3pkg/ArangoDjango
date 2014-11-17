@@ -7,7 +7,7 @@ from djara.django.menus.models import GlobalMenu
 register = template.Library()
 
 
-def show_global_menu(context, menu_template='menus/simple_menu.html'):
+def show_global_menu(context, menu_template='djara/django/menus/simple_menu.html'):
     """
     """
 
