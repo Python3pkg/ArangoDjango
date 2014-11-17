@@ -21,15 +21,21 @@ class PermissionMixin(object):
 
 class Permission(CollectionModel):
 
+    collection_name = 'djara_permission'
+
     name = CharField(null=False)
 
 
 class Group(CollectionModel, PermissionMixin):
 
+    collection_name = 'djara_group'
+
     permissions = ManyToManyField(to=Permission, related_name='groups')
 
 
 class User(BaseModel, PermissionMixin):
+
+    collection_name = 'djara_user'
 
     username_index = HashIndex(fields=['username'])
     email_address_index = HashIndex(fields=['email_address'])
