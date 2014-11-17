@@ -1,7 +1,8 @@
 from django import template
 from django.template import loader, Context
 from django.template.base import Template
-from menus.models import GlobalMenu
+
+from djara.django.menus.models import GlobalMenu
 
 register = template.Library()
 
