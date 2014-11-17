@@ -1,0 +1,41 @@
+{% load i18n %}
+<html>
+  <!-- HEADER -->
+  <head lang='de'>
+    <meta charset='UTF-8'>
+    <title>|*SUBJECT*|</title>
+  </head>
+  <!-- BODY -->
+  <body>
+    <style>
+      
+    </style>
+    <table align='center' cellpadding='0' cellspacing='0' class='table-0' width='620'>
+      <tr>
+        <td>
+          <!-- LOGO -->
+          <table align='center' cellpadding='0' cellspacing='0' class='table-1' width='620'>
+            <tr>
+              <td>
+                <img src='{{ logo_url }}' width='100%'>
+              </td>
+            </tr>
+          </table>
+          <!-- MAIN TABLE -->
+          <table align='center' cellpadding='0' cellspacing='0' class='table-1' width='620'>
+            <tr>
+              <td width='20'></td>
+              <td>
+                {% blocktrans %}
+                You have successfully registered. <br />
+                Click on this link to activate your account: <a href="{{ activate_account_url }}">{{ activate_account_url }}</a>
+                {% endblocktrans %}
+              </td>
+              <td width='20'></td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
