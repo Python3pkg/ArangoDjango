@@ -1,5 +1,3 @@
-from auth.models import User
-from auth.utils import logout, login
 from django.conf import settings
 from django.core.urlresolvers import reverse_lazy
 from django.http.response import HttpResponseNotFound
@@ -7,6 +5,10 @@ from django.shortcuts import render, redirect
 from django.template import loader
 from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext as _
+
+from djara.django.auth.models import User
+from djara.django.auth.utils import login, logout
+
 
 def login_view(request):
     """

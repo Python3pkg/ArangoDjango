@@ -5,7 +5,7 @@
 
 from django.conf.urls import patterns, url
 
-urlpatterns = patterns('contrib.admin.views',
+urlpatterns = patterns('djara.django.contrib.admin.views',
     url(r'^login/$', 'login', name='login'),
     url(r'^logout/$', 'logout', name='logout'),
     # url(r'^password_change/$', 'django.contrib.auth.views.password_change', name='password_change'),

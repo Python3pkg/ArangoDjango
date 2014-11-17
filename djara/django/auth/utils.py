@@ -1,5 +1,6 @@
-from auth.models import User
 from django.middleware.csrf import rotate_token
+
+from djara.django.auth.models import User
 
 SESSION_KEY = '_auth_user_id'
 

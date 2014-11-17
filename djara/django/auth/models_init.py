@@ -1,4 +1,4 @@
-from auth.models import User, Group, Permission
+from djara.django.auth.models import Permission, Group, User
 
 Permission.init()
 Group.init()

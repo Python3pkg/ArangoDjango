@@ -1,5 +1,6 @@
-from auth.utils import get_session_user
 from django.utils.functional import SimpleLazyObject
+
+from djara.django.auth.utils import get_session_user
 
 
 def get_user(request):

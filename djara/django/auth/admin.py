@@ -1,6 +1,6 @@
-from auth.models import User
-from contrib.admin.options import CollectionAdmin
-from django.contrib import admin
+# from auth.models import User
+# from contrib.admin.options import CollectionAdmin
+# from django.contrib import admin
 
 # class UserAdmin(CollectionAdmin):
 #
