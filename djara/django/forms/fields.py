@@ -51,6 +51,14 @@ class FileField(TextField):
         return file
 
 
+
+    def get(self):
+        """
+        """
+
+        return self.file_name
+
+
     def set(self, *args, **kwargs):
         """
         """
@@ -71,10 +79,7 @@ class FileField(TextField):
         """
         """
 
-        try:
-            self.file_name = string_val.split('/')[-1]
-        except:
-            pass
+        self.file_name = string_val
 
 
     def validate(self):
