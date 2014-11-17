@@ -4,9 +4,8 @@ from arangodb.orm.models import CollectionModel
 
 from django.utils import timezone
 
-from auth.fields import PasswordField
-from mail.utils import send_html_email
-
+from djara.django.auth.fields import PasswordField
+from djara.django.mail.utils import send_html_email
 
 
 class BaseModel(CollectionModel):
