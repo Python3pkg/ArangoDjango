@@ -9,6 +9,7 @@ from arangodb.orm.fields import NumberField, CharField, ForeignKeyField, ManyToM
     DateField, DatetimeField
 
 from djara.django.models.fields import FileField
+from djara.django.restframework.fields import RestFileField
 from djara.django.restframework.relations import RelatedCollectionModelField
 
 
@@ -39,7 +40,7 @@ class CollectionModelSerializer(serializers.Serializer):
         DatetimeField: fields.DateTimeField,
 
         # Only Django fields
-        FileField: fields.FileField,
+        FileField: RestFileField,
     }
 
     def get_fields(self):
