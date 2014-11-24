@@ -1,8 +1,14 @@
 import copy
+
 from django.core.exceptions import ValidationError
 from django.utils.datastructures import SortedDict
+
 from rest_framework import serializers, fields, relations
-from arangodb.orm.fields import NumberField, CharField, ForeignKeyField, ManyToManyField
+
+from arangodb.orm.fields import NumberField, CharField, ForeignKeyField, ManyToManyField, BooleanField, ChoiceField, \
+    DateField, DatetimeField
+
+from djara.django.models.fields import FileField
 from djara.django.restframework.relations import RelatedCollectionModelField
 
 
@@ -23,8 +29,17 @@ class CollectionModelSerializer(serializers.Serializer):
     _options_class = CollectionModelSerializerOptions
 
     field_mapping = {
+
+        # ArangoPy fields
+        BooleanField: fields.BooleanField,
         NumberField: fields.IntegerField,
         CharField: fields.CharField,
+        ChoiceField: fields.ChoiceField,
+        DateField: fields.DateField,
+        DatetimeField: fields.DateTimeField,
+
+        # Only Django fields
+        FileField: fields.FileField,
     }
 
     def get_fields(self):
