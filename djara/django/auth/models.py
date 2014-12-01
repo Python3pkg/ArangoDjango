@@ -91,10 +91,28 @@ class User(BaseModel, PermissionMixin):
         self.save()
 
     def is_authenticated(self):
+        """
+        """
+
         return True
 
     def is_staff(self):
+        """
+        """
+
         return self.is_staff_member
+
+    def has_module_perms(self, app_label):
+        """
+        """
+
+        return True
+
+    def has_perm(self, code):
+        """
+        """
+
+        return True
 
     def email_user(self, subject, message, from_email=None):
         """
