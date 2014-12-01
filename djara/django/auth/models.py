@@ -93,6 +93,8 @@ class User(BaseModel, PermissionMixin):
     def is_authenticated(self):
         return True
 
+    def is_staff(self):
+        return self.is_staff_member
 
     def email_user(self, subject, message, from_email=None):
         """
