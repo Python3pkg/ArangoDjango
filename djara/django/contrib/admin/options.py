@@ -1,7 +1,8 @@
 from django import forms
-from django.contrib.admin.options import ModelAdmin, TO_FIELD_VAR, IS_POPUP_VAR
+from django.contrib.admin.options import ModelAdmin, IS_POPUP_VAR
 from django.contrib.admin.templatetags.admin_urls import add_preserved_filters
 from django.contrib.admin.util import flatten_fieldsets
+from django.contrib.admin.views.main import TO_FIELD_VAR
 from django.core.exceptions import FieldError
 from django.core.urlresolvers import reverse
 from django.forms.models import modelform_defines_fields, modelform_factory
@@ -89,8 +90,7 @@ class CollectionAdmin(ModelAdmin):
             'absolute_url': view_on_site_url,
             'form_url': form_url,
             'opts': opts,
-            # 'content_type_id': get_content_type_for_model(self.model).pk,
-            'content_type_id': self.model.id,
+            'content_type_id': self.model.collection_instance.name,
             'save_as': self.save_as,
             'save_on_top': self.save_on_top,
             'to_field_var': TO_FIELD_VAR,
