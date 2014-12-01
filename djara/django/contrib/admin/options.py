@@ -1,8 +1,11 @@
 from django import forms
-from django.contrib.admin.options import ModelAdmin
+from django.contrib.admin.options import ModelAdmin, TO_FIELD_VAR, IS_POPUP_VAR
+from django.contrib.admin.templatetags.admin_urls import add_preserved_filters
 from django.contrib.admin.util import flatten_fieldsets
 from django.core.exceptions import FieldError
+from django.core.urlresolvers import reverse
 from django.forms.models import modelform_defines_fields, modelform_factory
+from django.template.response import TemplateResponse
 from djara.django.forms.forms import CollectionForm
 
 
@@ -52,3 +55,55 @@ class CollectionAdmin(ModelAdmin):
         except FieldError as e:
             raise FieldError('%s. Check fields/fieldsets/exclude attributes of class %s.'
                              % (e, self.__class__.__name__))
+        
+
+    def get_view_on_site_url(self, obj=None):
+        if obj is None or not self.view_on_site:
+            return None
+
+        if callable(self.view_on_site):
+            return self.view_on_site(obj)
+        
+        elif self.view_on_site and hasattr(obj, 'get_absolute_url'):
+            # use the ContentType lookup if view_on_site is True
+            return reverse('admin:view_on_site', kwargs={
+                'content_type_id': obj.collection_name,
+                'object_id': obj.id
+            })
+        
+
+    def render_change_form(self, request, context, add=False, change=False, form_url='', obj=None):
+        opts = self.model._meta
+        app_label = opts.app_label
+        preserved_filters = self.get_preserved_filters(request)
+        form_url = add_preserved_filters({'preserved_filters': preserved_filters, 'opts': opts}, form_url)
+        view_on_site_url = self.get_view_on_site_url(obj)
+        context.update({
+            'add': add,
+            'change': change,
+            'has_add_permission': self.has_add_permission(request),
+            'has_change_permission': self.has_change_permission(request, obj),
+            'has_delete_permission': self.has_delete_permission(request, obj),
+            'has_file_field': True,  # FIXME - this should check if form or formsets have a FileField,
+            'has_absolute_url': view_on_site_url is not None,
+            'absolute_url': view_on_site_url,
+            'form_url': form_url,
+            'opts': opts,
+            # 'content_type_id': get_content_type_for_model(self.model).pk,
+            'content_type_id': self.model.id,
+            'save_as': self.save_as,
+            'save_on_top': self.save_on_top,
+            'to_field_var': TO_FIELD_VAR,
+            'is_popup_var': IS_POPUP_VAR,
+            'app_label': app_label,
+        })
+        if add and self.add_form_template is not None:
+            form_template = self.add_form_template
+        else:
+            form_template = self.change_form_template
+
+        return TemplateResponse(request, form_template or [
+            "admin/%s/%s/change_form.html" % (app_label, opts.model_name),
+            "admin/%s/change_form.html" % app_label,
+            "admin/change_form.html"
+        ], context, current_app=self.admin_site.name)
