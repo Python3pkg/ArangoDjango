@@ -1,14 +1,14 @@
 from arangodb.index.unique import HashIndex
 from arangodb.orm.fields import CharField, BooleanField, DatetimeField, UuidField, ManyToManyField
-from arangodb.orm.models import CollectionModel
 
 from django.utils import timezone
 
 from djara.django.auth.fields import PasswordField
 from djara.django.mail.utils import send_html_email
+from djara.django.models.model import DjangoModel
 
 
-class BaseModel(CollectionModel):
+class BaseModel(DjangoModel):
 
     uuid = UuidField()
 
@@ -19,14 +19,14 @@ class PermissionMixin(object):
         pass
 
 
-class Permission(CollectionModel):
+class Permission(DjangoModel):
 
     collection_name = 'djara_permission'
 
     name = CharField(null=False)
 
 
-class Group(CollectionModel, PermissionMixin):
+class Group(DjangoModel, PermissionMixin):
 
     collection_name = 'djara_group'
 
