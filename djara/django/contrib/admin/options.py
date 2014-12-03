@@ -19,6 +19,7 @@ class CollectionAdmin(ModelAdmin):
 
     form = CollectionForm
 
+    view_on_site = True
 
     def get_form(self, request, obj=None, **kwargs):
         """
