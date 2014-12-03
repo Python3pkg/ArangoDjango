@@ -1,3 +1,4 @@
+from arangodb.orm.fields import ModelField
 from arangodb.orm.models import CollectionModel
 
 
@@ -19,3 +20,12 @@ class DjangoModel(CollectionModel):
                 return []
 
         class_meta.get_field_by_name = get_field_by_name
+
+        # Get field, by name
+        class_meta.get_field = lambda field: get_field_by_name(field)[0]
+
+        # PK field
+        pk_model_field = ModelField()
+        pk_model_field.on_init(model_class, 'pk')
+
+        class_meta.pk = pk_model_field
