@@ -93,11 +93,12 @@ def fields_for_model(model, fields=None, exclude=None, widgets=None,
         else:
             formfield = formfield_callback(f, **kwargs)
 
-        if formfield:
+        if formfield or fields is None:
             field_list.append((f.name, formfield))
         else:
             ignored.append(f.name)
     field_dict = SortedDict(field_list)
+
     if fields:
         field_dict = SortedDict(
             [(f, field_dict.get(f)) for f in fields
@@ -120,10 +121,20 @@ class BaseCollectionForm(BaseForm):
         else:
             self.instance = instance
             object_data = {}
-            # object_data = model_to_dict(instance, opts.fields, opts.exclude)
+
+            exclude = []
+            if hasattr(opts, 'exclude'):
+                exclude = exclude
+
+            for field_name in opts.fields:
+                if field_name in exclude:
+                    continue
+
+                object_data[field_name] = getattr(instance, field_name)
+
         # if initial was provided, it should override the values from instance
-        # if initial is not None:
-        #     object_data.update(initial)
+        if initial is not None:
+            object_data.update(initial)
         # self._validate_unique will be set to True by BaseModelForm.clean().
         # It is False by default so overriding self.clean() and failing to call
         # super will stop validate_unique from being called.
