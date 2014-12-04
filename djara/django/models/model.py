@@ -19,6 +19,9 @@ class DjangoQuery(Query):
         """
         """
 
+        if field == 'pk':
+            field = '_key'
+
         if order is None:
             order = self.SORTING_ASC
 
@@ -49,20 +52,27 @@ class DjangoQueryset(CollectionQueryset):
 
         self._query = DjangoQuery()
         self.query = self._query
-
+        
         self.model = manager.model
 
 
-    def order_by(self, field, order):
+    def order_by(self, *args):
         """
         """
 
-        if order.endswith('pk'):
-            return self
+        # We want only django sorting
+        for o in args:
+            if o.startswith('-'):
+                order = self._query.SORTING_ASC
+                o = o.replace('-', '')
+            else:
+                order = self._query.SORTING_DESC
+
+            field = o
+
+            self._query.sort_by(field=field, order=order)
 
         self._has_cache = False
-
-        self._query.sort_by(field=field, order=order)
 
         return self
 
