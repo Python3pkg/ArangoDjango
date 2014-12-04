@@ -5,12 +5,13 @@ from django.core.exceptions import FieldError
 from django.forms.util import ErrorList
 from django.forms.widgets import media_property
 from django.utils.datastructures import SortedDict
-from django.forms.fields import CharField, FileField, ChoiceField
+from django.forms.fields import CharField, FileField, ChoiceField, BooleanField, DateField, DateTimeField
 from django.forms.forms import BaseForm, get_declared_fields
-from django.forms.models import ModelFormOptions, ALL_FIELDS
+from django.forms.models import ModelFormOptions, ALL_FIELDS, InlineForeignKeyField
 
-
-from arangodb.orm.fields import CharField as ArangoCharField, ChoiceField as ArangoChoiceField
+from arangodb.orm.fields import CharField as ArangoCharField, ChoiceField as ArangoChoiceField, \
+    BooleanField as ArangoBooleanField, ForeignKeyField as ArangoForeignKeyField, DateField as ArangoDateField, \
+    DatetimeField as ArangoDatetimeField
 
 from djara.django.models.fields import FileField as ArangoFileField
 
@@ -25,6 +26,14 @@ def map_arangopy_field_to_form_field(model_field, **kwargs):
         field = FileField(**kwargs)
     elif isinstance(model_field, ArangoChoiceField):
         field = ChoiceField(choices=model_field.choices)
+    elif isinstance(model_field, ArangoBooleanField):
+        field = BooleanField(**kwargs)
+    elif isinstance(model_field, ArangoDateField):
+        field = DateField(**kwargs)
+    elif isinstance(model_field, ArangoDatetimeField):
+        field = DateTimeField(**kwargs)
+    elif isinstance(model_field, ArangoForeignKeyField):
+        field = InlineForeignKeyField(**kwargs)
     else:
         field = None
 
