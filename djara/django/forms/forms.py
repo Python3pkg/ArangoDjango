@@ -216,7 +216,7 @@ class CollectionFormMetaclass(type):
 
 class CollectionForm(six.with_metaclass(CollectionFormMetaclass, BaseCollectionForm)):
 
-    def save(self):
+    def save(self, commit=True):
         """
         """
 
