@@ -1,18 +1,15 @@
-# from auth.models import User
-# from contrib.admin.options import CollectionAdmin
-# from django.contrib import admin
+from djara.django.contrib import admin as unused_admin
+from django.contrib import admin
+from djara.django.contrib.admin.options import CollectionAdmin
+from djara.django.auth.models import User
 
-# class UserAdmin(CollectionAdmin):
-#
-#     list_display = ( 'username', )
-#
-# admin.site.register(User, UserAdmin)
+""" models """
+class UserAdmin(CollectionAdmin):
+    """
+    User Admin
+    """
+    list_display = ('username', 'email_address', )
+    list_filter = ('is_staff_member', 'is_owner', )
+    exclude = ( 'groups', 'permissions', )
 
-# class ExtendedSliderAdmin(admin.ModelAdmin):
-#     """
-#     Extendend slider admin
-#     """
-#     list_display = ('name', )
-#     list_filter = ('created', )
-#
-# admin.site.register(ExtendedSlider, ExtendedSliderAdmin)
+admin.site.register(User, UserAdmin)
