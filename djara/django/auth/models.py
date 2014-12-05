@@ -123,6 +123,10 @@ class User(BaseModel, PermissionMixin):
         send_html_email(subject, message, from_email, [self.email_address])
 
 
+    def __unicode__(self):
+        return u'%s <%s>' % (self.username, self.email_address)
+
+
     class Meta(object):
         app_label = 'auth'
         verbose_name = 'User'

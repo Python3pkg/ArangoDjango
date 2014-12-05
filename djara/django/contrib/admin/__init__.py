@@ -1,2 +1,2 @@
 from options import CollectionAdmin
-from sites import CollectionAdminSite
+from sites import CollectionAdminSite, site

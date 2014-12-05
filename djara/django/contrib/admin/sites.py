@@ -179,3 +179,4 @@ class CollectionAdminSite(DjangoAdminSite):
 
 
 django.contrib.admin.site = CollectionAdminSite()
+site = django.contrib.admin.site
