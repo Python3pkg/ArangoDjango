@@ -4,9 +4,10 @@ import datetime
 from django.core.files.base import File
 from django.core.files.storage import default_storage
 from django.utils.encoding import force_str, force_text
+from django.utils.translation import ugettext as _
 from django.db.models.fields.files import FileDescriptor
 
-from arangodb.orm.fields import TextField
+from arangodb.orm.fields import TextField, BooleanField
 
 
 class FieldFile(File):
@@ -224,3 +225,21 @@ class FileField(TextField):
 
     def generate_filename(self, instance, filename):
         return os.path.join(self.get_directory_name(), self.get_filename(filename))
+
+
+class DjangoBooleanField(BooleanField):
+
+
+    flatchoices = (
+        (False, _('False')),
+        (True, _('True')),
+    )
+
+    def __getattribute__(self, item):
+        """
+        """
+
+        if item == 'choices':
+            return True
+        else:
+            return super(BooleanField, self).__getattribute__(item)

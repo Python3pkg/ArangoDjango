@@ -8,8 +8,8 @@ class UserAdmin(CollectionAdmin):
     """
     User Admin
     """
-    list_display = ('username', 'email_address', )
-    list_filter = ('is_staff_member', 'is_owner', )
+    list_display = ('username', 'email_address', 'is_staff_member', 'is_owner', 'is_active', 'is_logged_in', )
+    list_filter = ('is_staff_member', 'is_owner', 'is_active', 'is_logged_in', )
     exclude = ( 'groups', 'permissions', )
 
 admin.site.register(User, UserAdmin)

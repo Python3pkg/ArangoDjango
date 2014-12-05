@@ -117,7 +117,7 @@ class DjangoModel(CollectionModel):
 
             fields = model_class.get_all_fields()
             if field_name in fields:
-                return [fields[field_name]]
+                return [fields[field_name], model_class, False, False]
             else:
                 raise models.FieldDoesNotExist
 
