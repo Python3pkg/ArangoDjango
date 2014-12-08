@@ -1,13 +1,15 @@
 import os
-import datetime
+from datetime import datetime, date
 
 from django.core.files.base import File
 from django.core.files.storage import default_storage
+from django.conf import settings
 from django.utils.encoding import force_str, force_text
+from django.utils import timezone
 from django.utils.translation import ugettext as _
 from django.db.models.fields.files import FileDescriptor
 
-from arangodb.orm.fields import TextField, BooleanField
+from arangodb.orm.fields import TextField, BooleanField, DateField, DatetimeField
 
 
 class FieldFile(File):
@@ -218,7 +220,7 @@ class FileField(TextField):
 
 
     def get_directory_name(self):
-        return os.path.normpath(force_text(datetime.datetime.now().strftime(force_str(self.upload_to))))
+        return os.path.normpath(force_text(datetime.now().strftime(force_str(self.upload_to))))
 
     def get_filename(self, filename):
         return os.path.normpath(self.storage.get_valid_name((filename)))
@@ -243,3 +245,49 @@ class DjangoBooleanField(BooleanField):
             return True
         else:
             return super(BooleanField, self).__getattribute__(item)
+
+
+class DjangoDateField(DateField):
+    """
+        Can be timezone aware
+    """
+
+    def __init__(self, **kwargs):
+        """
+        """
+
+        super(DjangoDateField, self).__init__(**kwargs)
+
+        if self.null and not self.default:
+            self.date = None
+        else:
+            if self.default:
+                self.date = self.default
+            else:
+                if getattr(settings, 'USE_TZ', False):
+                    self.date = timezone.now().date()
+                else:
+                    self.date = date.today()
+
+
+class DjangoTimeField(DatetimeField):
+    """
+        Can be timezone aware
+    """
+
+    def __init__(self, **kwargs):
+        """
+        """
+
+        super(DjangoTimeField, self).__init__(**kwargs)
+
+        if self.null and not self.default:
+            self.time = None
+        else:
+            if self.default:
+                self.time = self.default
+            else:
+                if getattr(settings, 'USE_TZ', False):
+                    self.time = timezone.now()
+                else:
+                    self.time = datetime.now()

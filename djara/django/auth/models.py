@@ -6,7 +6,7 @@ from arangodb.orm.fields import CharField, BooleanField, DatetimeField, UuidFiel
 
 from djara.django.auth.fields import PasswordField
 from djara.django.mail.utils import send_html_email
-from djara.django.models.fields import DjangoBooleanField
+from djara.django.models.fields import DjangoBooleanField, DjangoTimeField
 from djara.django.models.model import DjangoModel
 
 # extend_meta_data
@@ -56,7 +56,7 @@ class User(BaseModel, PermissionMixin):
 
     # Login status
     is_logged_in = DjangoBooleanField(verbose_name=_('Is logged in'), default=False, null=False)
-    last_login_time = DatetimeField(verbose_name=_('Last login'))
+    last_login_time = DjangoTimeField(verbose_name=_('Last login'))
 
     groups = ManyToManyField(to=Group, related_name='users')
     permissions = ManyToManyField(to=Permission, related_name='users')
