@@ -92,7 +92,7 @@ def register_action(request, view_name):
         'activate_account_url': '%s%s' % (settings.BASE_URL, reverse_lazy('auth:register-activate', kwargs=kwargs)),
     })
 
-    user.email_user(subject=_('Registration'), message=register_template_string, from_email='noreply@dress-up.clothing')
+    user.email_user(subject=_('Registration'), message=register_template_string, from_email=settings.REGISTRATION_EMAIL)
 
     return render(request, 'auth/user/register_successful.html', {})
 
