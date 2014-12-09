@@ -108,13 +108,13 @@ class User(BaseModel, PermissionMixin):
         """
         """
 
-        return True
+        return self.is_staff()
 
     def has_perm(self, code):
         """
         """
 
-        return True
+        return self.is_staff()
 
     def email_user(self, subject, message, from_email=None):
         """
