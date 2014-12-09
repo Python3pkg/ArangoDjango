@@ -19,7 +19,7 @@ class MenuTree(object):
 
 class MenuTreeItem(object):
 
-    def __init__(self, key, display_name, view, permission_method):
+    def __init__(self, key, display_name, view, permission_method, **kwargs):
         """
         """
 
@@ -35,6 +35,15 @@ class MenuTreeItem(object):
 
         # Temporary variable
         self.active = False
+
+        # Children
+        self.children = kwargs.pop('children', [])
+
+    def add_child(self, child):
+        """
+        """
+
+        self.children.append(child)
 
 
 class GlobalMenu(MenuTree):
@@ -61,11 +70,20 @@ class GlobalMenu(MenuTree):
         return cls._instance
 
     @classmethod
-    def add_menu_item(cls, item):
+    def add_menu_item(cls, item, parent_key=None):
         """
         """
 
-        cls.instance().items.append(item)
+        if parent_key is None:
+            cls.instance().items.append(item)
+        else:
+            items = cls.instance().items
+
+            # Iterate over all items and search the parent
+            for item in items:
+                if item.key == parent_key:
+                    item.add_child(item)
+                    break
 
     @classmethod
     def item(cls, key):

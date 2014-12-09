@@ -28,6 +28,46 @@ def show_global_menu(context, menu_template='djara/django/menus/simple_menu.html
 register.simple_tag(takes_context=True)(show_global_menu)
 
 
+def show_active_sub_menu(context, menu_template='djara/django/menus/simple_menu.html'):
+    """
+    """
+
+    def get_active_menu(menu_tree):
+        active_item = None
+
+        for item in menu_tree.items:
+            if item.active:
+                active_item = item
+                break
+
+        return active_item
+
+    active_menu_item = get_active_menu(GlobalMenu.instance())
+
+    return render_menu_children(context, active_menu_item, menu_template)
+
+register.simple_tag(takes_context=True)(show_global_menu)
+
+
+def render_menu_children(context, active_menu_item, menu_template='djara/django/menus/simple_menu.html'):
+    """
+    """
+
+    request = context['request']
+
+    template_context = Context({
+        'menu_items': active_menu_item.children,
+        'current_view': request.resolver_match.view_name,
+        'user': context['user'],
+    })
+
+    template = loader.get_template(menu_template)
+
+    rendered = template.render(template_context)
+
+    return rendered
+
+
 class ShowPermittedMenuEntryNode(template.Node):
 
     def __init__(self, nodelist_empty, menu_item_variable):
