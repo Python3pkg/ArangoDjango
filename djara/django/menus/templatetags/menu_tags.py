@@ -46,7 +46,7 @@ def show_active_sub_menu(context, menu_template='djara/django/menus/simple_menu.
 
     return render_menu_children(context, active_menu_item, menu_template)
 
-register.simple_tag(takes_context=True)(show_global_menu)
+register.simple_tag(takes_context=True)(show_active_sub_menu)
 
 
 def render_menu_children(context, active_menu_item, menu_template='djara/django/menus/simple_menu.html'):
@@ -55,8 +55,13 @@ def render_menu_children(context, active_menu_item, menu_template='djara/django/
 
     request = context['request']
 
+    if active_menu_item is None:
+        children = []
+    else:
+        children = active_menu_item.children
+
     template_context = Context({
-        'menu_items': active_menu_item.children,
+        'menu_items': children,
         'current_view': request.resolver_match.view_name,
         'user': context['user'],
     })
