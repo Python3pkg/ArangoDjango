@@ -80,9 +80,9 @@ class GlobalMenu(MenuTree):
             items = cls.instance().items
 
             # Iterate over all items and search the parent
-            for item in items:
-                if item.key == parent_key:
-                    item.add_child(item)
+            for parent_item in items:
+                if parent_item.key == parent_key:
+                    parent_item.add_child(item)
                     break
 
     @classmethod
