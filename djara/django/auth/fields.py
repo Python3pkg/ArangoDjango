@@ -16,10 +16,6 @@ class PasswordField(CharField):
         """
         """
 
-        # See if the password has been hashed
-        if '$' in self.text:
-            return
-
         salt = hasher.salt()
         self.text = '%s' % ( hasher.encode(password=self.text, salt=salt, iterations=12000) )
 
