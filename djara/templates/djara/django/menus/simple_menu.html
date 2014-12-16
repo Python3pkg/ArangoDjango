@@ -1,16 +1,14 @@
 {% load menu_tags %}
 
-<ul class="nav navbar-nav navbar-left">
-    {% for menu_item in menu_items %}
-        {% show_permitted_menu_entry menu_item %}
-            {% if menu_item.active %}
-                <li class="active">
-            {% else %}
-                <li>
-            {% endif %}
+{% for menu_item in menu_items %}
+    {% show_permitted_menu_entry menu_item %}
+        {% if menu_item.active %}
+            <li class="active">
+                {% else %}
+            <li>
+        {% endif %}
 
-                <a href="{% url menu_item.view %}">{{ menu_item.display_name }}</a>
-            </li>
-        {% endshow_permitted_menu_entry %}
-    {% endfor %}
-</ul>
+    <a href="{% url menu_item.view %}">{{ menu_item.display_name }}</a>
+    </li>
+    {% endshow_permitted_menu_entry %}
+{% endfor %}
