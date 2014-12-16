@@ -45,6 +45,32 @@ class MenuTreeItem(object):
 
         self.children.append(child)
 
+    def get_child(self, view_name):
+        """
+        """
+
+        child_with_view = None
+
+        for child in self.children:
+            if child.view == view_name:
+                child_with_view = child
+                break
+
+        return child_with_view
+
+    def has_child(self, view_name):
+        """
+        """
+
+        return self.get_child(view_name) is not None
+
+
+    def is_current_item(self, current_view):
+        """
+        """
+
+        return self.view == current_view
+
 
 class GlobalMenu(MenuTree):
 

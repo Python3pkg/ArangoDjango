@@ -32,11 +32,14 @@ def show_active_sub_menu(context, menu_template='djara/django/menus/simple_menu.
     """
     """
 
+    request = context['request']
+    current_view = request.resolver_match.view_name
+
     def get_active_menu(menu_tree):
         active_item = None
 
         for item in menu_tree.items:
-            if item.active:
+            if item.is_current_item(current_view):
                 active_item = item
                 break
 
@@ -92,7 +95,8 @@ class ShowPermittedMenuEntryNode(template.Node):
                 template_string = ''
 
                 # Set if is current view
-                if resolved_menu_item.view == context['current_view']:
+                current_view = context['current_view']
+                if resolved_menu_item.is_current_item(current_view) or resolved_menu_item.has_child(current_view):
                     resolved_menu_item.active = True
 
                 # Render template
