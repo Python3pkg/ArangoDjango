@@ -185,7 +185,10 @@ class FileField(TextField):
         """
         """
 
-        return self.file_name
+        try:
+            return os.path.join(self.get_directory_name(), self.file_name.split('/')[-1])
+        except:
+            return self.file_name
 
 
     def set(self, *args, **kwargs):
