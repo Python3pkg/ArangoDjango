@@ -83,7 +83,7 @@ class FieldFile(File):
     # associated model instance.
 
     def save(self, name, content, save=True):
-        name = self.field.generate_filename(self.instance, name)
+        # name = self.field.generate_filename(self.instance, name)
         self.name = self.storage.save(name, content)
         setattr(self.instance, self.field.name, self.name)
 
@@ -174,10 +174,13 @@ class FileField(TextField):
 
         file = self.file
 
+        # This was reset
+        if self.file_name == self.content_file:
+            return
+
         if file:
             # Commit the file to storage prior to saving the model
             file.save(file.name, self.content_file, save=False)
-        return file
 
 
 
@@ -196,7 +199,11 @@ class FileField(TextField):
             value = args[0]
 
             self.content_file = value
-            self.file_name = self.generate_filename(self, value)
+
+            if not '/' in value:
+                self.file_name = self.generate_filename(self, value)
+            else:
+                self.file_name = value
 
     def dumps(self):
         """
