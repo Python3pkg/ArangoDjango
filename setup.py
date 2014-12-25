@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='ArangoDjango',
-    version= '0.0.23',
+    version= '0.0.24',
     packages=find_packages(),
     include_package_data=True,
     requires=[
