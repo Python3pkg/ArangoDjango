@@ -17,9 +17,11 @@ class PasswordField(CharField):
         """
 
         # Check if the password is not already hashed
-        if hasher.must_update(self.text):
-            salt = hasher.salt()
-            self.text = '%s' % ( hasher.encode(password=self.text, salt=salt, iterations=12000) )
+        if not '$' in self.text:
+            if not self.text.count('$') == 3:
+                if hasher.must_update(self.text):
+                    salt = hasher.salt()
+                    self.text = '%s' % ( hasher.encode(password=self.text, salt=salt, iterations=12000) )
 
     def verify(self, password):
         hashed_password = self.text
