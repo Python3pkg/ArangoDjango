@@ -41,3 +41,10 @@ At the moment I am only testing for Python 2.7
 
 Features
 ------------
+
+- Django REST framework (basic things work)
+- Authentication (still relaying on the django database)
+- Basic working Django admin
+- Forms can be used with Models
+- Basic menu
+- Additional model fields
