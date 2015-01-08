@@ -11,7 +11,7 @@ from django.forms.models import ModelFormOptions, ALL_FIELDS, InlineForeignKeyFi
 
 from arangodb.orm.fields import CharField as ArangoCharField, ChoiceField as ArangoChoiceField, \
     BooleanField as ArangoBooleanField, ForeignKeyField as ArangoForeignKeyField, DateField as ArangoDateField, \
-    DatetimeField as ArangoDatetimeField
+    DatetimeField as ArangoDatetimeField, ListField, DictField
 
 from djara.django.models.fields import FileField as ArangoFileField
 
@@ -22,6 +22,10 @@ def map_arangopy_field_to_form_field(model_field, **kwargs):
 
     if isinstance(model_field, ArangoCharField):
         field = CharField(max_length=model_field.max_length, **kwargs)
+    elif isinstance(model_field, ListField):
+        field = CharField(**kwargs)
+    elif isinstance(model_field, DictField):
+        field = CharField(**kwargs)
     elif isinstance(model_field, ArangoFileField):
         field = FileField(**kwargs)
     elif isinstance(model_field, ArangoChoiceField):
