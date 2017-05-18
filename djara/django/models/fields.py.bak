@@ -10,7 +10,6 @@ from django.utils.translation import ugettext as _
 from django.db.models.fields.files import FileDescriptor
 
 from arangodb.orm.fields import TextField, BooleanField, DateField, DatetimeField
-import collections
 
 
 class FieldFile(File):
@@ -157,7 +156,7 @@ class FileField(TextField):
 
         self.storage = storage or default_storage
         self.upload_to = upload_to
-        if isinstance(upload_to, collections.Callable):
+        if callable(upload_to):
             self.generate_filename = upload_to
 
 

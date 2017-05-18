@@ -14,7 +14,6 @@ from arangodb.orm.fields import CharField as ArangoCharField, ChoiceField as Ara
     DatetimeField as ArangoDatetimeField, ListField, DictField
 
 from djara.django.models.fields import FileField as ArangoFileField
-import collections
 
 
 def map_arangopy_field_to_form_field(model_field, **kwargs):
@@ -102,7 +101,7 @@ def fields_for_model(model, fields=None, exclude=None, widgets=None,
         if formfield_callback is None:
             formfield = map_arangopy_field_to_form_field(f, **kwargs)
             # formfield = f.formfield(**kwargs)
-        elif not isinstance(formfield_callback, collections.Callable):
+        elif not callable(formfield_callback):
             raise TypeError('formfield_callback must be a function or callable')
         else:
             formfield = formfield_callback(f, **kwargs)
@@ -234,7 +233,7 @@ class CollectionForm(six.with_metaclass(CollectionFormMetaclass, BaseCollectionF
         """
         """
 
-        for key, value in list(self.cleaned_data.items()):
+        for key, value in self.cleaned_data.items():
             setattr(self.instance, key, value)
 
         self.instance.save()

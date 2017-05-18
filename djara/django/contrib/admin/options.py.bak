@@ -8,7 +8,6 @@ from django.core.urlresolvers import reverse
 from django.forms.models import modelform_defines_fields, modelform_factory
 from django.template.response import TemplateResponse
 from djara.django.forms.forms import CollectionForm
-import collections
 
 
 class CollectionAdmin(ModelAdmin):
@@ -64,7 +63,7 @@ class CollectionAdmin(ModelAdmin):
         if obj is None or not self.view_on_site:
             return None
 
-        if isinstance(self.view_on_site, collections.Callable):
+        if callable(self.view_on_site):
             return self.view_on_site(obj)
         
         elif self.view_on_site and hasattr(obj, 'get_absolute_url'):

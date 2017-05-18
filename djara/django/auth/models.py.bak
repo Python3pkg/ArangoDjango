@@ -124,7 +124,7 @@ class User(BaseModel, PermissionMixin):
 
 
     def __unicode__(self):
-        return '%s <%s>' % (self.username, self.email_address)
+        return u'%s <%s>' % (self.username, self.email_address)
 
 
     class Meta(object):
